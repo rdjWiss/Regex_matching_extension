@@ -1,5 +1,5 @@
 
-/** The source of the code is in this link : https://github.com/tankchintan/highlight-js/blob/master/highlight.js **/
+/** The source of the code is in this link : https://github.com/tankchintan/highlight-js/blob/master/highlight.js with aujustement to regex search **/
 !function($) {
     $.fn.highlight = function(pat, ignore,casse)
      {    
@@ -29,15 +29,14 @@
                 str = str.replace(diacritics[i][0], diacritics[i][1]);
             }
            return str;
-        }
-          // console.log("pat",typeof(pat))    
-          let option = "g"
-          if(!casse) option+="i"
+        }   
+          
+        let option = "g"
+        if(!casse) option+="i"
 
-            console.log('casse2',casse,option)
-         var regex = typeof(pat) === "string" ? new RegExp(pat, option) : pat;
-          console.log("regex",regex)   
-         var numberOcc=0
+        var regex = typeof(pat) === "string" ? new RegExp(pat, option) : pat;
+        // console.log("regex",regex)   
+        var numberOcc=0
         function innerHighlight(node, pat, ignore) {
             var skip = 0;
             if (node.nodeType == 3) {
@@ -46,19 +45,14 @@
                 var found =false
 
                 var matchArray = [];
-                 var resultString = "";
-                 var first=0; var last=0;
-
-                 var newNode = document.createElement('span');
+                var resultString = "";
+                var first=0; var last=0;
+                var newNode = document.createElement('span');
 
                 // find each match
-                 while((matchArray = regex.exec(searchString)) != null) {
-                    // console.log("searchString",searchString)
-
+                while((matchArray = regex.exec(searchString)) != null) {
                    last = matchArray.index;
-                   // console.log('last',last,matchArray[0]);
-                   // get all of string up to match, concatenate
-
+                   
                    var notHighlight =  document.createTextNode(searchString.substring(first, last));
                    var spannode = document.createElement('span');
                     spannode.className = 'highlight';
@@ -67,21 +61,18 @@
                     newNode.appendChild(notHighlight)
                     newNode.appendChild(spannode)
 
-                    // console.log('Created',notHighlight, spannode, newNode)
-
                    first = regex.lastIndex;
                    skip = 1;
-                    numberOcc+=1
-                    // console.log('occ',numberOcc,matchArray[0],node.data )
+                    numberOcc+=1//Increment occurrence number
                  }
 
+                 //If at least one match found
                  if(skip ==1){
                     // finish off string
                     var notHighlight =  document.createTextNode(searchString.substring(first,searchString.length));
                      newNode.appendChild(notHighlight)
-                     
-                     // console.log("NODES", node,newNode)
-                     
+                    
+                    //Replace the node with the new one where occurences are highlighted                     
                      node.replaceWith(newNode)
                  }
                  
@@ -103,6 +94,7 @@
         ignore : false
     }
 
+    //Remove all highlighting
     $.fn.removeHighlight = function() {
         return this.find("span.highlight").each(function() {
             this.parentNode.firstChild.nodeName;
