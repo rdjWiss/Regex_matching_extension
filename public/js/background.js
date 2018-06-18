@@ -1,4 +1,5 @@
 chrome.browserAction.setBadgeText({ text: 'ON' });
+chrome.storage.local.set({onoff: 'ON'})
 
     chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         chrome.tabs.get(sender.tab.id, function(tab) {
@@ -7,7 +8,10 @@ chrome.browserAction.setBadgeText({ text: 'ON' });
             }
             if (tab.index >= 0) { // tab is visible
                // chrome.browserAction.setBadgeText({tabId:tab.id, text:message.badgeText});
-               chrome.browserAction.setBadgeText({ text: 'ON' });
+               // chrome.browserAction.setBadgeText({ text: 'ON' });
+               chrome.storage.local.get(['onoff'], function(object) {
+                    chrome.browserAction.setBadgeText({ text: object.onoff });
+               });
             } else { // prerendered tab, invisible yet, happens quite rarely
                 var tabId = sender.tab.id, text = message.badgeText;
                 chrome.webNavigation.onCommitted.addListener(function update(details) {

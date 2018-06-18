@@ -52,14 +52,21 @@ clear.addEventListener("click", function(event) {
 // the extension with an effect on the icon of the extension.
 window.onload = function(){
     var checkbox=document.getElementById("onOff");
+    chrome.storage.local.get(['onoff'], function(object) {
+        if(object.onoff == 'ON')  checkbox.checked = true
+            else checkbox.checked = false
+   });
+
    checkbox.onchange =function (){
          if (checkbox.checked==true)
          {  
             chrome.browserAction.setBadgeText({ text: 'ON' });
+            chrome.storage.local.set({onoff: 'ON'});
          }
          if (checkbox.checked==false)
          {
             chrome.browserAction.setBadgeText({ text: 'OFF' });
+            chrome.storage.local.set({onoff: 'OFF'});
          }
     }
 };

@@ -12,7 +12,7 @@
      "default_popup": "search.html"
     },
     "permissions": [
-      "management","activeTab","tabs","<all_urls>"
+      "management","activeTab","tabs","<all_urls>","storage"
      ],
      "background": {
         "scripts": ["public/js/background.js"]
