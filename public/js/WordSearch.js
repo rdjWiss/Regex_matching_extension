@@ -42,7 +42,11 @@ window.onload=function(){
   chrome.storage.local.get(['regex','casse'], function(object) {
     if(object.regex != undefined && object.regex != ""){
        numbr=highlight(object.regex,true,object.casse)
-       // console.log(numbr)
+       console.log('numbre',numbr)
+
+       chrome.runtime.sendMessage({type: "notification", nombre:numbr}, function(response) {
+          console.log("response.farewell");
+        });
     }
   });
 }

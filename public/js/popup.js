@@ -61,6 +61,11 @@ clear.addEventListener("click", function(event) {
     handleClearRegex()
 });  
 
+document.getElementById("clearStore").addEventListener("click", function(event) {
+    chrome.storage.local.set({regex: ""});
+    handleClearRegex()
+});  
+
     // to detect the effect of checkbox to Enable and disable the features of
 // the extension with an effect on the icon of the extension.
 window.onload = function(){

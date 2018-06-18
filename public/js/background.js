@@ -23,6 +23,17 @@ chrome.storage.local.set({onoff: 'ON'})
                 });
             }
         });
+
+        if (message.type == "notification"){
+          chrome.browserAction.getBadgeText({}, function(result) {
+                chrome.browserAction.setBadgeText({ text: ""+message.nombre });
+                //sendResponse({farewell: 'result.tex'});
+                sendResponse()
+            });
+          
+        }
+
+        
 });
   // to run the script 
     var script = document.createElement('script');
