@@ -42,6 +42,7 @@
             if (node.nodeType == 3) {
                
                  var pos = node.data.search(regex);
+                 // console.log(node.data)
 
                 if (pos >= 0 && node.data.length > 0) { // .* matching "" causes infinite loop
                     var match = node.data.match(regex); // get the match(es), but we would only handle the 1st one, hence /g is not recommended
@@ -55,6 +56,8 @@
                     middleBit.parentNode.replaceChild(spanNode, middleBit); 
                     skip = 1; // skip this middleBit, but still need to check endBit
                      numberOcc+=1
+
+                     // console.log('occ',numberOcc,match[0])
                 }
 
             } else if (node.nodeType == 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {

@@ -45,7 +45,7 @@ window.onload=function(){
        console.log('numbre',numbr)
 
        chrome.runtime.sendMessage({type: "notification", nombre:numbr}, function(response) {
-          console.log("response.farewell");
+          console.log("response");
         });
     }
   });

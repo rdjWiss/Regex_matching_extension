@@ -46,24 +46,25 @@ input.addEventListener("keyup", function(event) {
 });  
 
 //Traitement de l'evenement clear: remove tous le highlighting
-function handleClearRegex() {
+function handleClearRegex(ignore) {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
         chrome.tabs.sendMessage(tabs[0].id, 
         {action: "clear" },
          function(response) {
-            chrome.browserAction.setBadgeText({"text": ""});                 
+            //ignore the badge text or not
+            if(!ignore) chrome.browserAction.setBadgeText({"text": ""});                 
          });  
     });
 }
 
 var clear = document.getElementById("clear")
 clear.addEventListener("click", function(event) {
-    handleClearRegex()
+    handleClearRegex(false)
 });  
 
 document.getElementById("clearStore").addEventListener("click", function(event) {
     chrome.storage.local.set({regex: ""});
-    handleClearRegex()
+    handleClearRegex(false)
 });  
 
     // to detect the effect of checkbox to Enable and disable the features of
@@ -80,14 +81,14 @@ window.onload = function(){
    checkbox.onchange =function (){
          if (checkbox.checked==true)
          {  
-            chrome.browserAction.setBadgeText({ text: 'ON' });
+            //chrome.browserAction.setBadgeText({ text: 'ON' });
             chrome.storage.local.set({onoff: 'ON'});//Sauvegarder nouveau état ON
          }
          if (checkbox.checked==false)
          {
             chrome.browserAction.setBadgeText({ text: 'OFF' });
             chrome.storage.local.set({onoff: 'OFF'});//Sauvegarder nouveau état OFF
-            handleClearRegex()
+            handleClearRegex(true)
          }
     }
 };

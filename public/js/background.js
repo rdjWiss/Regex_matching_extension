@@ -10,13 +10,14 @@ chrome.storage.local.set({onoff: 'ON'})
                // chrome.browserAction.setBadgeText({tabId:tab.id, text:message.badgeText});
                // chrome.browserAction.setBadgeText({ text: 'ON' });
                chrome.storage.local.get(['onoff'], function(object) {
+                if(object.onoff == 'OFF') {
                     chrome.browserAction.setBadgeText({ text: object.onoff });
+                }
                });
             } else { // prerendered tab, invisible yet, happens quite rarely
                 var tabId = sender.tab.id, text = message.badgeText;
                 chrome.webNavigation.onCommitted.addListener(function update(details) {
                     if (details.tabId == tabId) {
-                        //chrome.browserAction.setBadgeText({tabId: tabId, text: text});
                         chrome.browserAction.setBadgeText({ text: 'ON' });
                         chrome.webNavigation.onCommitted.removeListener(update);
                     }
@@ -27,11 +28,11 @@ chrome.storage.local.set({onoff: 'ON'})
         if (message.type == "notification"){
           chrome.browserAction.getBadgeText({}, function(result) {
                 chrome.browserAction.setBadgeText({ text: ""+message.nombre });
-                //sendResponse({farewell: 'result.tex'});
                 sendResponse()
             });
           
         }
+
 
         
 });
