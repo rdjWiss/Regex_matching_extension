@@ -40,42 +40,23 @@
         function innerHighlight(node, pat, ignore) {
             var skip = 0;
             if (node.nodeType == 3) {
-                let searchString = (ignore ? replaceDiacritics(node.data) : node.data);
+               
+                 var pos = node.data.search(regex);
 
-                var found =false
+                if (pos >= 0 && node.data.length > 0) { // .* matching "" causes infinite loop
+                    var match = node.data.match(regex); // get the match(es), but we would only handle the 1st one, hence /g is not recommended
+                    var spanNode = document.createElement('span');
+                    spanNode.className = 'highlight'; // set css
+                    var middleBit = node.splitText(pos); // split to 2 nodes, node contains the pre-pos text, middleBit has the post-pos
+                    var endBit = middleBit.splitText(match[0].length); // similarly split middleBit to 2 nodes
+                    var middleClone = middleBit.cloneNode(true);
+                    spanNode.appendChild(middleClone);
+                    // parentNode ie. node, now has 3 nodes by 2 splitText()s, replace the middle with the highlighted spanNode:
+                    middleBit.parentNode.replaceChild(spanNode, middleBit); 
+                    skip = 1; // skip this middleBit, but still need to check endBit
+                     numberOcc+=1
+                }
 
-                var matchArray = [];
-                var resultString = "";
-                var first=0; var last=0;
-                var newNode = document.createElement('span');
-
-                // find each match
-                while((matchArray = regex.exec(searchString)) != null) {
-                   last = matchArray.index;
-                   
-                   var notHighlight =  document.createTextNode(searchString.substring(first, last));
-                   var spannode = document.createElement('span');
-                    spannode.className = 'highlight';
-                    spannode.appendChild(document.createTextNode(matchArray[0] ));
-
-                    newNode.appendChild(notHighlight)
-                    newNode.appendChild(spannode)
-
-                   first = regex.lastIndex;
-                   skip = 1;
-                    numberOcc+=1//Increment occurrence number
-                 }
-
-                 //If at least one match found
-                 if(skip ==1){
-                    // finish off string
-                    var notHighlight =  document.createTextNode(searchString.substring(first,searchString.length));
-                     newNode.appendChild(notHighlight)
-                    
-                    //Replace the node with the new one where occurences are highlighted                     
-                     node.replaceWith(newNode)
-                 }
-                 
             } else if (node.nodeType == 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
                 for (var i = 0; i < node.childNodes.length; ++i) {
                     i += innerHighlight(node.childNodes[i], pat, ignore);
